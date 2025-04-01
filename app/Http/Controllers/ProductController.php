@@ -30,25 +30,28 @@ class ProductController extends Controller
     }
     //新規
     public function add(ArticleRequest $request) {
-        $product = new Product();
-        $product -> company_id = $request -> company_id;
-        $product -> product_name = $request -> name;
-        $product -> price = $request -> price;
-        $product -> stock = $request -> stock;
-        $product -> comment = $request -> comment;
-
-        if ($request -> hasFile('img')) {
-            $img = $request -> file('img');
-            $img_name = $img->getClientOriginalName();
-            $img->storeAs('public/images', $img_name);
-            $img_path = 'storage/images/' . $img_name;
-            $product -> img_path = $img_path;
-        }else {
-            $product -> img_path = null;
-        }
-        $product -> save();
-        return redirect() -> route('list');
-        
+        try {
+            $product = new Product();
+            $product -> company_id = $request -> company_id;
+            $product -> product_name = $request -> name;
+            $product -> price = $request -> price;
+            $product -> stock = $request -> stock;
+            $product -> comment = $request -> comment;
+            if ($request -> hasFile('img')) {
+                $img = $request -> file('img');
+                $img_name = $img->getClientOriginalName();
+                $img->storeAs('public/images', $img_name);
+                $img_path = 'storage/images/' . $img_name;
+                $product -> img_path = $img_path;
+            }else {
+                $product -> img_path = null;
+            }
+            $product -> save();
+            return redirect() -> route('list');
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return back();
+        } 
     }
     //詳細
     public function info($id) {
@@ -66,23 +69,29 @@ class ProductController extends Controller
     }
 
     public function update(ArticleRequest $request) {
-        $product = Product::find($request->id);
-        $product -> company_id = $request -> company_id;
-        $product -> product_name = $request -> name;
-        $product -> price = $request -> price;
-        $product -> stock = $request -> stock;
-        $product -> comment = $request -> comment;
-        if ($request -> hasFile('img')) {
-            $img = $request -> file('img');
-            $img_name = $img->getClientOriginalName();
-            $img->storeAs('public/images', $img_name);
-            $img_path = 'storage/images/' . $img_name;
-            $product -> img_path = $img_path;
-        }else {
-            $product -> img_path = null;
+        try {
+            $product = Product::find($request->id);
+            $product -> company_id = $request -> company_id;
+            $product -> product_name = $request -> name;
+            $product -> price = $request -> price;
+            $product -> stock = $request -> stock;
+            $product -> comment = $request -> comment;
+            if ($request -> hasFile('img')) {
+                $img = $request -> file('img');
+                $img_name = $img->getClientOriginalName();
+                $img->storeAs('public/images', $img_name);
+                $img_path = 'storage/images/' . $img_name;
+                $product -> img_path = $img_path;
+            }else {
+                $product -> img_path = null;
+            }
+            $product -> save();
+            return redirect()->route('list');
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return back();
         }
-        $product -> save();
-        return redirect()->route('list');
+
     }
     //削除
     public function delete($id) {
@@ -91,21 +100,26 @@ class ProductController extends Controller
             $product ->delete();
             return redirect()->route('list');
         } catch (Exception $e) {
+            Log::error($e->getMessage());
             return back();
         }
     }
     //検索
     public function search(Request $request) {
-        $keyword = $request->keyword ?? '';
-        $company_id = $request -> company_id ?? '';
-
-        $product = new Product();
-        $products = $product -> getListBySearch($keyword,$company_id);
-
-        $company = new Company();
-        $companies = $company -> getList();
-
-        return view('list', ['products' => $products, 'companies' => $companies]);
+        try {
+            $keyword = $request->keyword ?? '';
+            $company_id = $request -> company_id ?? '';
+    
+            $product = new Product();
+            $products = $product -> getListBySearch($keyword,$company_id);
+    
+            $company = new Company();
+            $companies = $company -> getList();
+    
+            return view('list', ['products' => $products, 'companies' => $companies]);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return back();
+        }
     }
-
 }

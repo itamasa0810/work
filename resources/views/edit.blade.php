@@ -16,12 +16,12 @@
         
         <div>
             <label>商品名<span class="asterisk">*</span></label>
-            <input type="text" name="name" value="{{ $product->product_name }}" required>
+            <input type="text" name="name" value="{{ $product->product_name }}">
         </div>
     
         <div>
             <label>メーカー名<span class="asterisk">*</span></label>
-            <select class="company" name="company_id" required>
+            <select class="company" name="company_id">
                 @foreach ($companies as $company)
                     <option value="{{ $company->id }}" {{ $product->company_id == $company->id ? 'selected' : '' }}>
                         {{ $company->company_name }}
@@ -32,12 +32,12 @@
     
         <div>
             <label>価格<span class="asterisk">*</span></label>
-            <input type="text" name="price" value="{{ $product->price }}" required>
+            <input type="text" name="price" value="{{ $product->price }}">
         </div>
     
         <div>
             <label>在庫数<span class="asterisk">*</span></label>
-            <input type="text" name="stock" value="{{ $product->stock }}" required>
+            <input type="text" name="stock" value="{{ $product->stock }}">
         </div>
     
         <div>
