@@ -28,7 +28,7 @@ class Product extends Model
         return $product;
     }
     //検索
-    public function getListBySearch($keyword,$company_id) {
+    public function getListBySearch($keyword,$company_id,$hight_price,$low_price,$hight_stock,$low_stock) {
         $products = DB::table('products')
             ->join('companies', 'products.company_id', '=', 'companies.id')
             ->select('products.*', 'companies.company_name');
@@ -38,6 +38,18 @@ class Product extends Model
             }
             if (!empty($company_id)) {
                 $products->where('products.company_id', $company_id);
+            }
+            if (is_numeric($hight_price)) {
+                $products->where('products.price','<=' ,$hight_price);
+            }
+            if (is_numeric($low_price)) {
+                $products->where('products.price','>=' , $low_price);
+            }
+            if (is_numeric($hight_stock)) {
+                $products->where('products.stock','<=' , $hight_stock);
+            }
+            if (is_numeric($low_stock)) {
+                $products->where('products.stock','>=' , $low_stock);
             }
         return $products->get();
     }

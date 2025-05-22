@@ -98,7 +98,7 @@ class ProductController extends Controller
         try {
             $product = Product::find($id);
             $product ->delete();
-            return redirect()->route('list');
+            return response()->json(['status' => 'ok']);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             return back();
@@ -109,14 +109,19 @@ class ProductController extends Controller
         try {
             $keyword = $request->keyword ?? '';
             $company_id = $request -> company_id ?? '';
+            $hight_price = $request->hight_price ?? '';
+            $low_price = $request->low_price ?? '';
+            $hight_stock = $request->hight_stock ?? '';
+            $low_stock = $request->low_stock ?? '';
     
             $product = new Product();
-            $products = $product -> getListBySearch($keyword,$company_id);
+            $products = $product -> getListBySearch($keyword,$company_id,$hight_price,$low_price,$hight_stock,$low_stock);
     
             $company = new Company();
             $companies = $company -> getList();
     
-            return view('list', ['products' => $products, 'companies' => $companies]);
+            
+            return response()->json( ['products' => $products, 'companies' => $companies]);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             return back();

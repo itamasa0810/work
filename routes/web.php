@@ -40,4 +40,4 @@ Route::get('/edit/{id}', [App\Http\Controllers\ProductController::class, 'edit']
 // 編集処理
 Route::post('/edit', [App\Http\Controllers\ProductController::class, 'update'])->name('update');
 
-Route::get('/delete/{id}',[App\Http\Controllers\ProductController::class, 'delete'])->name('delete');
+Route::post('/delete/{id}',[App\Http\Controllers\ProductController::class, 'delete'])->name('delete');

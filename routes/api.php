@@ -17,3 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/buy/{id}/{orders}', [App\Http\Controllers\API\SalesController::class, 'buy'])->name('buy');
